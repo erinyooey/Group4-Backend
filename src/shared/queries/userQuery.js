@@ -1,16 +1,18 @@
 const { bcrypt, client, uuid, jwt, prisma } = require("../shared");
 const JWT = process.env.JWT || "123456";
 
-const registerUser = async ({ username, password }) => {
+const registerUser = async ({ password, firstName, lastName, email }) => {
   const hashPassword = await bcrypt.hash(password, 10);
   const newUser = await prisma.user.create({
     data: {
-      username,
       password: hashPassword,
+      firstName,
+      lastName,
+      email,
     },
   });
 
-  const token = await jwt.sign({ id: response.rows[0].id }, JWT, {
+  const token = await jwt.sign({ id: newUser.id }, JWT, {
     expiresIn: "1h",
   });
   return token;
