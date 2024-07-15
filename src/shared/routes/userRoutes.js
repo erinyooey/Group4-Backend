@@ -1,5 +1,5 @@
-const { routes } = require("../shared/shared");
-const { findUserByToken } = require("../queries/userQueries");
+const { routes } = require("../shared");
+const { findUserByToken } = require("../queries/userQuery");
 const { register, displayAll } = require("../controllers/userControllers");
 
 const isLoggedIn = async (req, res, next) => {
