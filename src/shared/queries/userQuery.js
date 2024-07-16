@@ -18,6 +18,33 @@ const registerUser = async ({ password, firstName, lastName, email }) => {
   return token;
 };
 
+const logInUser = async({email, password}) =>{
+  const user = await prisma.user.findUnique({
+    where: {
+      email
+    }
+  });
+  console.log(user)
+  // error handling
+  if(!user){
+    const error = Error("User not found")
+    error.status = 404;
+    throw error;
+  }
+  // use bcrypt compare for the password, and return users information and json web token
+  const comparePassword = await bcrypt.compare(password, user.password)
+  if(!comparePassword){
+    const error = Error("Password not found")
+    error.status = 401;
+    throw error;
+  }
+
+  const token = await jwt.sign({ id: user.id }, JWT, {
+    expiresIn: "1h",
+  });
+  return token;
+}
+
 const getAllUser = async () => {
   const users = await prisma.user.findMany();
   return users;
@@ -53,4 +80,5 @@ module.exports = {
   getAllUser,
   findUserByToken,
   prisma,
+  logInUser
 };
