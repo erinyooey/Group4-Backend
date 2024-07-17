@@ -17,6 +17,7 @@ const login = async(req, res, next) => {
 }
 
 const displayAll = async (req, res, next) => {
+  console.log("hello")
   const users = await getAllUser();
   res.send(users);
 };

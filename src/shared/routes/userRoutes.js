@@ -12,7 +12,7 @@ const isLoggedIn = async (req, res, next) => {
 };
 
 routes.post("/register", register);
-routes.post("/login", login)
+routes.post("/login", login);
 routes.get("/all_users", isLoggedIn, displayAll);
 
 module.exports = routes;
