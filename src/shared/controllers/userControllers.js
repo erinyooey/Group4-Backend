@@ -1,4 +1,4 @@
-const { registerUser, getAllUser, logInUser } = require("../queries/userQuery");
+const { registerUser, getAllUser, logInUser, deleteUserById } = require("../queries/userQuery");
 
 const register = async (req, res, next) => {
   const token = await registerUser(req.body);
@@ -21,8 +21,20 @@ const displayAll = async (req, res, next) => {
   const users = await getAllUser();
   res.send(users);
 };
+
+const deleteUser = async(req, res, next) =>{
+  try {
+    const user = await deleteUserById(req.params.id)
+    res.send({message: "User deleted successfully: ", user})
+  } catch (error) {
+    next(error)
+    res.status(500).send({error: "Failed to delete user"})
+  }
+}
+
 module.exports = {
   register,
   displayAll,
-  login
+  login,
+  deleteUser
 };

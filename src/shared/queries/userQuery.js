@@ -74,10 +74,27 @@ const findUserByToken = async (header) => {
   return user;
 };
 
+const deleteUserById = async(id) => {
+  try {
+    const user = await prisma.user.delete({
+      where: {
+        id,
+      }
+    });
+    
+    return user
+  } catch (error) {
+    console.error( `Error deleting user with ${id}: `, error)
+    throw new Error("failed to delete user")
+  }
+}
+
+
 module.exports = {
   registerUser,
   getAllUser,
   findUserByToken,
   prisma,
   logInUser,
+  deleteUserById,
 };
