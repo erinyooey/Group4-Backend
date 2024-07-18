@@ -74,21 +74,43 @@ const findUserByToken = async (header) => {
   return user;
 };
 
-const deleteUserById = async(id) => {
+const deleteUserById = async (id) => {
   try {
     const user = await prisma.user.delete({
       where: {
         id,
-      }
+      },
     });
-    
-    return user
-  } catch (error) {
-    console.error( `Error deleting user with ${id}: `, error)
-    throw new Error("failed to delete user")
-  }
-}
 
+    return user;
+  } catch (error) {
+    console.error(`Error deleting user with ${id}: `, error);
+    throw new Error("failed to delete user");
+  }
+};
+
+const updateUserById = async (id, body) => {
+  try {
+    const { firstName, lastName, password, email } = body;
+    const hashPassword = await bcrypt.hash(password, 10);
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        password: hashPassword,
+        firstName,
+        lastName,
+        email,
+      },
+    });
+
+    return user;
+  } catch (error) {
+    console.error(`Error updating user with ${id}: `, error);
+    throw new Error("failed to update user");
+  }
+};
 
 module.exports = {
   registerUser,
@@ -97,4 +119,5 @@ module.exports = {
   prisma,
   logInUser,
   deleteUserById,
+  updateUserById,
 };
